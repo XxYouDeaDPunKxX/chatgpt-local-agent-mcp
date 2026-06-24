@@ -1,13 +1,1 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="chatgpt-local-agent-mcp icon">
-  <defs>
-    <linearGradient id="g" x1="10" y1="8" x2="56" y2="58" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#9EF7FF"/>
-      <stop offset=".52" stop-color="#8F7DFF"/>
-      <stop offset="1" stop-color="#00FFB2"/>
-    </linearGradient>
-  </defs>
-  <rect width="64" height="64" rx="18" fill="#05070f"/>
-  <path d="M18 21c0-3.9 3.1-7 7-7h14c3.9 0 7 3.1 7 7v22c0 3.9-3.1 7-7 7H25c-3.9 0-7-3.1-7-7V21Z" fill="none" stroke="url(#g)" stroke-width="3"/>
-  <path d="M25 27h14M25 34h10M25 41h14" stroke="url(#g)" stroke-width="3" stroke-linecap="round"/>
-  <circle cx="48" cy="18" r="4" fill="#00FFB2"/>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="chatgpt-local-agent-mcp icon"><defs><linearGradient id="g" x1="10" y1="8" x2="56" y2="58" gradientUnits="userSpaceOnUse"><stop stop-color="#9EF7FF"/><stop offset=".52" stop-color="#8F7DFF"/><stop offset="1" stop-color="#00FFB2"/></linearGradient></defs><rect width="64" height="64" rx="18" fill="#05070f"/><path d="M18 21c0-3.9 3.1-7 7-7h14c3.9 0 7 3.1 7 7v22c0 3.9-3.1 7-7 7H25c-3.9 0-7-3.1-7-7V21Z" fill="none" stroke="url(#g)" stroke-width="3"/><path d="M25 27h14M25 34h10M25 41h14" stroke="url(#g)" stroke-width="3" stroke-linecap="round"/><circle cx="48" cy="18" r="4" fill="#00FFB2"/></svg>
