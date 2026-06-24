@@ -1,6 +1,6 @@
 @echo off
 setlocal
-title Agentic Filesystem MCP - Live Monitor
+title chatgpt-local-agent-mcp-live-monitor
 color 0B
 
 set "REPO_ROOT=%~dp0"
@@ -9,7 +9,7 @@ set "MONITOR_SCRIPT=%REPO_ROOT%scripts\live-monitor.ps1"
 cls
 echo.
 echo  ============================================================
-echo   Agentic Filesystem MCP - Live Monitor
+echo   chatgpt-local-agent-mcp-live-monitor
 echo  ============================================================
 echo.
 echo   Mode:      Alert only, no automatic kill

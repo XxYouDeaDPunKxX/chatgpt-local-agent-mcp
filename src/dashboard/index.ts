@@ -57,7 +57,7 @@ const CURRENT_RISK_WINDOW_MS = 15 * 60 * 1000;
 const CLOUDFLARED_EXE =
   process.env.CLOUDFLARED_EXE || path.join(os.homedir(), "Documents", "cloudflared", "cloudflared.exe");
 const CLOUDFLARED_CONFIG = process.env.CLOUDFLARED_CONFIG || path.join(os.homedir(), ".cloudflared", "config.yml");
-const TUNNEL_NAME = process.env.CLOUDFLARE_TUNNEL_NAME || "agentic-filesystem-mcp";
+const TUNNEL_NAME = process.env.CLOUDFLARE_TUNNEL_NAME || "chatgpt-local-agent-mcp";
 const LIVE_MONITOR_SCRIPT = path.join(process.cwd(), "scripts", "live-monitor.ps1");
 const DASHBOARD_CSRF_TOKEN = crypto.randomBytes(32).toString("base64url");
 
@@ -68,7 +68,7 @@ function dashboardHtml(csrfToken: string): string {
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="dashboard-csrf-token" content="${csrfToken}">
-  <title>Agentic Filesystem MCP Control Center</title>
+  <title>chatgpt-local-agent-mcp-control-center</title>
   <style>
     :root {
       color-scheme: dark;
@@ -274,7 +274,7 @@ function dashboardHtml(csrfToken: string): string {
   <header>
     <div class="top">
       <div>
-        <h1>Agentic Filesystem MCP</h1>
+        <h1>chatgpt-local-agent-mcp</h1>
         <div class="subtitle">Local control center for your full-access ChatGPT workstation bridge.</div>
       </div>
       <div id="overallStatus" class="status-pill warn">Checking...</div>
@@ -1538,7 +1538,7 @@ async function buildDebugBundle(runtime: DashboardRuntime): Promise<string> {
   const configChecks = buildConfigChecks(status, runtime.config);
   const activity = activityFromEntries(await recentJournalEntries(runtime.config.journalPath, 250));
   return [
-    "Agentic Filesystem MCP debug bundle",
+    "chatgpt-local-agent-mcp-debug-bundle",
     `Generated: ${new Date().toISOString()}`,
     "",
     `Summary: ${status.summary}`,
@@ -1578,7 +1578,7 @@ async function buildDebugBundle(runtime: DashboardRuntime): Promise<string> {
 
 function briefFromStatus(status: Awaited<ReturnType<typeof buildStatus>>): string {
   return [
-    "Agentic Filesystem MCP diagnostic brief",
+    "chatgpt-local-agent-mcp-diagnostic-brief",
     "",
     `Summary: ${status.summary}`,
     `Local: ${status.local.ok ? "OK" : "FAIL"} ${status.local.message}`,
@@ -1753,7 +1753,7 @@ export function registerDashboardRoutes(app: { use: (path: string, router: Route
         "Alert-only by default; no automatic process kill",
       ],
       scriptPath: LIVE_MONITOR_SCRIPT,
-      testRootHint: path.join(path.dirname(globalThis.process.cwd()), "agentic-filesystem-mcp-live-test"),
+      testRootHint: path.join(path.dirname(globalThis.process.cwd()), "chatgpt-local-agent-mcp-live-test"),
     });
   });
 

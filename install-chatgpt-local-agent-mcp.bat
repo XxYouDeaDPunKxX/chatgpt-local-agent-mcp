@@ -1,6 +1,6 @@
 @echo off
 setlocal
-title Agentic Filesystem MCP - Installer
+title install-chatgpt-local-agent-mcp
 color 0B
 
 set "REPO_ROOT=%~dp0"
@@ -9,7 +9,7 @@ set "INSTALLER=%REPO_ROOT%scripts\install\installer.ps1"
 cls
 echo.
 echo  ============================================================
-echo   Agentic Filesystem MCP - Installer
+echo   install-chatgpt-local-agent-mcp
 echo  ============================================================
 echo.
 echo   This installer configures the local Windows workstation app.

@@ -1,18 +1,18 @@
 @echo off
 setlocal
-title Agentic Filesystem MCP - Control
+title chatgpt-local-agent-mcp-control
 color 0B
 set "REPO_ROOT=%~dp0"
 set "FALLBACK_LAUNCHER=%REPO_ROOT%scripts\launch-fallback.ps1"
 set "SERVER_CONTROL=%REPO_ROOT%scripts\server-control.ps1"
-set "LIVE_MONITOR_BAT=%REPO_ROOT%Start Live Monitor.bat"
+set "LIVE_MONITOR_BAT=%REPO_ROOT%chatgpt-local-agent-mcp-live-monitor.bat"
 cd /d "%REPO_ROOT%"
 
 :menu
 cls
 echo.
 echo  ============================================================
-echo   Agentic Filesystem MCP - Control
+echo   chatgpt-local-agent-mcp-control
 echo  ============================================================
 echo.
 echo   Status
@@ -95,7 +95,7 @@ goto menu
 color 0C
 echo.
 echo   ERROR: live monitor launcher was not found.
-echo   Expected Start Live Monitor.bat
+echo   Expected chatgpt-local-agent-mcp-live-monitor.bat
 echo.
 pause
 color 0B

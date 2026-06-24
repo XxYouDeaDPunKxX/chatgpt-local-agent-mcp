@@ -24,7 +24,7 @@ if (!$process) {
   throw "Fallback app process did not start."
 }
 try {
-  Add-Content -LiteralPath (Join-Path ([System.IO.Path]::GetTempPath()) "agentic-filesystem-mcp-fallback.log") -Value ("{0:s} launched fallback pid={1}" -f (Get-Date), $process.Id)
+  Add-Content -LiteralPath (Join-Path ([System.IO.Path]::GetTempPath()) "chatgpt-local-agent-mcp-fallback.log") -Value ("{0:s} launched fallback pid={1}" -f (Get-Date), $process.Id)
 } catch {
   [System.Diagnostics.Debug]::WriteLine("Fallback launch log write failed: $($_.Exception.Message)")
 }

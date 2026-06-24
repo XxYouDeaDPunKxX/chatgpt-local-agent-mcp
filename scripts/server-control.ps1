@@ -39,7 +39,7 @@ function Get-CloudflaredConfig {
 }
 
 function Get-TunnelName {
-  Get-EnvValue "CLOUDFLARE_TUNNEL_NAME" "agentic-filesystem-mcp"
+  Get-EnvValue "CLOUDFLARE_TUNNEL_NAME" "chatgpt-local-agent-mcp"
 }
 
 function Get-McpListener {
@@ -99,7 +99,7 @@ function Show-Status {
   $tunnelProcess = Get-TunnelProcess
 
   Write-Host ""
-  Write-Host "Agentic Filesystem MCP status"
+  Write-Host "chatgpt-local-agent-mcp status"
   Write-Host "Repo:        $RepoRoot"
   Write-Host "Local port:  $port"
   Write-Host "Public URL:  $baseUrl"
@@ -297,7 +297,7 @@ function Show-NonLocalListeners {
 
 function Show-Menu {
   Write-Host ""
-  Write-Host "Agentic Filesystem MCP Control"
+  Write-Host "chatgpt-local-agent-mcp-control"
   Write-Host "1. Status + health"
   Write-Host "2. Start local MCP server"
   Write-Host "3. Stop local MCP server"

@@ -9,7 +9,7 @@ $ErrorActionPreference = "Stop"
 $RepoRoot = Resolve-Path -LiteralPath (Join-Path $PSScriptRoot "..")
 $EnvPath = Join-Path $RepoRoot ".env"
 if ([string]::IsNullOrWhiteSpace($TestRoot)) {
-  $TestRoot = Join-Path (Split-Path -Parent $RepoRoot) "agentic-filesystem-mcp-live-test"
+  $TestRoot = Join-Path (Split-Path -Parent $RepoRoot) "chatgpt-local-agent-mcp-live-test"
 }
 $TestRoot = [System.IO.Path]::GetFullPath($TestRoot)
 $JournalOffset = 0L
@@ -220,7 +220,7 @@ function Check-Entry($Entry) {
 }
 
 Clear-Host
-Write-Host "Agentic Filesystem MCP live monitor" -ForegroundColor Cyan
+Write-Host "chatgpt-local-agent-mcp live monitor" -ForegroundColor Cyan
 Write-Host "Journal:   $JournalPath"
 Write-Host "Test root: $TestRoot"
 Write-Host "Mode:      alert only, no automatic kill"

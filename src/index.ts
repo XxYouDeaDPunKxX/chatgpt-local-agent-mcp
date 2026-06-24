@@ -313,7 +313,7 @@ function asyncRoute(
 app.get("/healthz", (_req, res) => {
   res.json({
     authRequired: config.authRequired,
-    name: "gpt-file-system-mcp",
+    name: "chatgpt-local-agent-mcp",
     ok: true,
     transport: "streamable-http",
     version: "0.1.0",
@@ -329,7 +329,7 @@ app.get("/debug/healthz", (_req, res) => {
     authRequired: config.authRequired,
     defaultCwd: config.defaultCwd,
     journalPath: config.journalPath,
-    name: "gpt-file-system-mcp",
+    name: "chatgpt-local-agent-mcp",
     ok: true,
     pid: process.pid,
     publicBaseUrl: config.publicBaseUrl,
@@ -452,11 +452,11 @@ app.use((error: unknown, req: Request, res: Response, next: NextFunction) => {
 
 app.listen(config.port, config.host, (error?: Error) => {
   if (error) {
-    console.error("Failed to start gpt-file-system-mcp:", error);
+    console.error("Failed to start chatgpt-local-agent-mcp:", error);
     process.exit(1);
   }
 
-  console.log(`gpt-file-system-mcp listening at http://${config.host}:${config.port}`);
+  console.log(`chatgpt-local-agent-mcp listening at http://${config.host}:${config.port}`);
   console.log(`Default cwd: ${config.defaultCwd}`);
   console.log(`Auth required: ${config.authRequired}`);
   if (!config.authRequired) {

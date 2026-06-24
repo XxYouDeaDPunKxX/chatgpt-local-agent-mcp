@@ -12,7 +12,7 @@ export type McpRuntime = {
 
 export function createMcpServer(runtime: McpRuntime): McpServer {
   const server = new McpServer({
-    name: "gpt-file-system-mcp",
+    name: "chatgpt-local-agent-mcp",
     version: "0.1.0",
   });
 

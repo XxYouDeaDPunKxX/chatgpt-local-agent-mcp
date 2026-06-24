@@ -1,4 +1,4 @@
-# ChatGPT Local Agent MCP 🖥️
+# chatgpt-local-agent-mcp 🖥️
 
 Give ChatGPT controlled hands on your Windows PC.
 
@@ -10,7 +10,7 @@ The logs are there.
 The browser session is there.
 The broken build is there.
 
-**ChatGPT Local Agent MCP** is a local MCP server that lets ChatGPT reach that machine and work on the real workspace, under your control.
+**chatgpt-local-agent-mcp** is a local MCP server that lets ChatGPT reach that machine and work on the real workspace, under your control.
 
 You run it on your Windows PC.
 You expose it through your own authenticated HTTPS endpoint.
@@ -197,7 +197,7 @@ Those blocks happen on the ChatGPT/OpenAI side. Making the MCP server more power
 From the extracted source folder, run:
 
 ```powershell
-.\Install Agentic Filesystem MCP.bat
+.\install-chatgpt-local-agent-mcp.bat
 ```
 
 The installer will guide you through the local setup.
@@ -347,7 +347,7 @@ Dashboard: http://127.0.0.1:8789/dashboard
 Normal install root:
 
 ```text
-%LOCALAPPDATA%\AgenticFilesystemMCP
+%LOCALAPPDATA%\chatgpt-local-agent-mcp
 ```
 
 ---

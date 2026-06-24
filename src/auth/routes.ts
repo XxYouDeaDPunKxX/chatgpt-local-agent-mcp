@@ -195,7 +195,7 @@ async function getGithubUser(accessToken: string): Promise<GithubUser> {
     headers: {
       Accept: "application/vnd.github+json",
       Authorization: `Bearer ${accessToken}`,
-      "User-Agent": "gpt-file-system-mcp",
+      "User-Agent": "chatgpt-local-agent-mcp",
     },
   });
   if (!response.ok) {

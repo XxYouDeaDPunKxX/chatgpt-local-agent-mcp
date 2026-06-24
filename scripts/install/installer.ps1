@@ -10,10 +10,10 @@ if ([Threading.Thread]::CurrentThread.ApartmentState -ne "STA") {
 }
 
 $SourceRoot = (Resolve-Path -LiteralPath (Join-Path $PSScriptRoot "..\..")).Path
-$DefaultInstallRoot = Join-Path $env:LOCALAPPDATA "AgenticFilesystemMCP"
+$DefaultInstallRoot = Join-Path $env:LOCALAPPDATA "chatgpt-local-agent-mcp"
 $script:InstallRoot = $DefaultInstallRoot
 $SourceEnvExamplePath = Join-Path $SourceRoot ".env.example"
-$InstallLog = Join-Path ([System.IO.Path]::GetTempPath()) "agentic-filesystem-mcp-installer.log"
+$InstallLog = Join-Path ([System.IO.Path]::GetTempPath()) "chatgpt-local-agent-mcp-installer.log"
 $script:State = [ordered]@{
   IsClosing = $false
   IsBusy = $false
@@ -296,9 +296,9 @@ function Install-AppFiles {
     "package.json",
     "package-lock.json",
     "tsconfig.json",
-    "Agentic Filesystem MCP Control.bat",
-    "Start Live Monitor.bat",
-    "Install Agentic Filesystem MCP.bat",
+    "chatgpt-local-agent-mcp-control.bat",
+    "chatgpt-local-agent-mcp-live-monitor.bat",
+    "install-chatgpt-local-agent-mcp.bat",
     "AI_WINFORMS_UI_CONTRACT.md"
   )
   foreach ($name in $files) {
@@ -408,7 +408,7 @@ function Load-ConfigIntoUi {
   $script:DefaultCwd.Text = Get-MapValue $map "GPT_FS_MCP_DEFAULT_CWD" ""
   $script:CloudflaredExe.Text = Get-MapValue $map "CLOUDFLARED_EXE" ""
   $script:CloudflaredConfig.Text = Get-MapValue $map "CLOUDFLARED_CONFIG" ""
-  $script:TunnelName.Text = Get-MapValue $map "CLOUDFLARE_TUNNEL_NAME" "agentic-filesystem-mcp"
+  $script:TunnelName.Text = Get-MapValue $map "CLOUDFLARE_TUNNEL_NAME" "chatgpt-local-agent-mcp"
 }
 
 function Get-ConfigSnapshotFromUi {
@@ -500,24 +500,24 @@ function Create-Shortcut {
   $shortcut.TargetPath = $TargetPath
   $shortcut.Arguments = $Arguments
   $shortcut.WorkingDirectory = $WorkingDirectory
-  $shortcut.Description = "Agentic Filesystem MCP"
+  $shortcut.Description = "chatgpt-local-agent-mcp"
   $shortcut.Save()
 }
 
 function Create-InstallerShortcuts {
   $installRoot = Get-InstallRoot
   $desktop = [Environment]::GetFolderPath("DesktopDirectory")
-  $startMenu = Join-Path ([Environment]::GetFolderPath("Programs")) "Agentic Filesystem MCP"
+  $startMenu = Join-Path ([Environment]::GetFolderPath("Programs")) "chatgpt-local-agent-mcp"
   New-Item -ItemType Directory -Force -Path $startMenu | Out-Null
-  $controlBat = Join-Path $installRoot "Agentic Filesystem MCP Control.bat"
-  $installBat = Join-Path $installRoot "Install Agentic Filesystem MCP.bat"
+  $controlBat = Join-Path $installRoot "chatgpt-local-agent-mcp-control.bat"
+  $installBat = Join-Path $installRoot "install-chatgpt-local-agent-mcp.bat"
   $fallbackLauncher = Join-Path $installRoot "scripts\launch-fallback.ps1"
   $powershell = (Get-Command powershell.exe -ErrorAction Stop).Source
 
-  Create-Shortcut (Join-Path $desktop "Agentic Filesystem MCP Control.lnk") $controlBat
-  Create-Shortcut (Join-Path $startMenu "Agentic Filesystem MCP Control.lnk") $controlBat
-  Create-Shortcut (Join-Path $startMenu "Agentic Filesystem MCP Installer.lnk") $installBat
-  Create-Shortcut (Join-Path $startMenu "Agentic Filesystem MCP Fallback Dashboard.lnk") $powershell "-STA -NoLogo -NoProfile -ExecutionPolicy Bypass -File `"$fallbackLauncher`""
+  Create-Shortcut (Join-Path $desktop "chatgpt-local-agent-mcp-control.lnk") $controlBat
+  Create-Shortcut (Join-Path $startMenu "chatgpt-local-agent-mcp-control.lnk") $controlBat
+  Create-Shortcut (Join-Path $startMenu "chatgpt-local-agent-mcp-installer.lnk") $installBat
+  Create-Shortcut (Join-Path $startMenu "chatgpt-local-agent-mcp-fallback-dashboard.lnk") $powershell "-STA -NoLogo -NoProfile -ExecutionPolicy Bypass -File `"$fallbackLauncher`""
   Write-InstallLog "Shortcuts created in Desktop and Start Menu."
 }
 
@@ -595,7 +595,7 @@ function Add-Field {
 [System.Windows.Forms.Application]::EnableVisualStyles()
 
 $script:Form = New-Object System.Windows.Forms.Form
-$script:Form.Text = "Agentic Filesystem MCP Installer"
+$script:Form.Text = "chatgpt-local-agent-mcp-installer"
 $script:Form.Size = New-Object System.Drawing.Size(1180, 780)
 $script:Form.MinimumSize = New-Object System.Drawing.Size(980, 660)
 $script:Form.StartPosition = "CenterScreen"
@@ -814,7 +814,7 @@ New-ActionButton "Save .env" { Set-InstallRoot $script:InstallFolderText.Text; $
 New-ActionButton "Install Dependencies + Build" { Set-InstallRoot $script:InstallFolderText.Text; $tabs.SelectedTab = $installTab; Invoke-BackgroundAction "Install dependencies and build" { Install-And-Build } }
 New-ActionButton "Create Shortcuts" { Set-InstallRoot $script:InstallFolderText.Text; Invoke-BackgroundAction "Create shortcuts" { Create-InstallerShortcuts } }
 New-ActionButton "Run Smoke Checks" { Set-InstallRoot $script:InstallFolderText.Text; $tabs.SelectedTab = $checksTab; Invoke-BackgroundAction "Smoke checks" { Run-SmokeChecks } }
-New-ActionButton "Open Control" { Set-InstallRoot $script:InstallFolderText.Text; Start-Process (Join-Path (Get-InstallRoot) "Agentic Filesystem MCP Control.bat") }
+New-ActionButton "Open Control" { Set-InstallRoot $script:InstallFolderText.Text; Start-Process (Join-Path (Get-InstallRoot) "chatgpt-local-agent-mcp-control.bat") }
 New-ActionButton "Open Log" { if (Test-Path -LiteralPath $InstallLog) { Start-Process $InstallLog } }
 
 $script:Form.Add_Shown({

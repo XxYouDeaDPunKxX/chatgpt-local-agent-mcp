@@ -18,11 +18,16 @@ $LocalAppDataRoot = if ([string]::IsNullOrWhiteSpace($env:LOCALAPPDATA)) {
 if ([string]::IsNullOrWhiteSpace($LocalAppDataRoot)) {
   $LocalAppDataRoot = Join-Path ([Environment]::GetFolderPath("UserProfile")) "AppData\Local"
 }
-$DefaultRuntimeRoot = Join-Path $LocalAppDataRoot "AgenticFilesystemMCP"
-if ($env:AGENTIC_FILESYSTEM_MCP_RUNTIME_ROOT) {
+$DefaultRuntimeRoot = Join-Path $LocalAppDataRoot "chatgpt-local-agent-mcp"
+$LegacyRuntimeRoot = Join-Path $LocalAppDataRoot "AgenticFilesystemMCP"
+if ($env:CHATGPT_LOCAL_AGENT_MCP_RUNTIME_ROOT) {
+  $RuntimeRoot = [System.IO.Path]::GetFullPath($env:CHATGPT_LOCAL_AGENT_MCP_RUNTIME_ROOT)
+} elseif ($env:AGENTIC_FILESYSTEM_MCP_RUNTIME_ROOT) {
   $RuntimeRoot = [System.IO.Path]::GetFullPath($env:AGENTIC_FILESYSTEM_MCP_RUNTIME_ROOT)
 } elseif (Test-Path -LiteralPath (Join-Path $DefaultRuntimeRoot ".env")) {
   $RuntimeRoot = $DefaultRuntimeRoot
+} elseif (Test-Path -LiteralPath (Join-Path $LegacyRuntimeRoot ".env")) {
+  $RuntimeRoot = $LegacyRuntimeRoot
 } else {
   $RuntimeRoot = $SourceRoot
 }
@@ -47,7 +52,7 @@ $script:CachedPublicHealth = $null
 $script:CachedProtectedMetadata = $null
 $script:CachedAuthMetadata = $null
 $script:LastPublicProbeAt = [datetime]::MinValue
-$script:FallbackLog = Join-Path ([System.IO.Path]::GetTempPath()) "agentic-filesystem-mcp-fallback.log"
+$script:FallbackLog = Join-Path ([System.IO.Path]::GetTempPath()) "chatgpt-local-agent-mcp-fallback.log"
 $script:IsRefreshing = $false
 $script:IsBusy = $false
 $script:IsClosing = $false
@@ -161,7 +166,7 @@ function Get-CloudflaredConfig {
 }
 
 function Get-TunnelName {
-  return (Get-EnvValue "CLOUDFLARE_TUNNEL_NAME" "agentic-filesystem-mcp")
+  return (Get-EnvValue "CLOUDFLARE_TUNNEL_NAME" "chatgpt-local-agent-mcp")
 }
 
 function Get-JournalPath {
@@ -751,7 +756,7 @@ function Build-MaintenanceText {
   Add-Kv $b "Fallback dashboard" "PowerShell WinForms, cold-start capable"
   Add-Kv $b "Web dashboard" "$(Get-LocalBaseUrl)/dashboard"
   Add-Kv $b "Server controls" "Use the buttons at the top of this app"
-  Add-Kv $b "Live monitor" (Join-Path $RepoRoot "Start Live Monitor.bat")
+  Add-Kv $b "Live monitor" (Join-Path $RepoRoot "chatgpt-local-agent-mcp-live-monitor.bat")
   Add-Kv $b "Cloudflared exe" (Get-CloudflaredExe)
   Add-Kv $b "Cloudflared config" (Get-CloudflaredConfig)
   Add-Kv $b "Server out log" $ServerOut
@@ -833,7 +838,7 @@ function Build-MonitorText {
     return $b.ToString()
   }
   Add-Kv $b "Script" (Join-Path $RepoRoot "scripts\live-monitor.ps1")
-  Add-Kv $b "Start bat" (Join-Path $RepoRoot "Start Live Monitor.bat")
+  Add-Kv $b "Start bat" (Join-Path $RepoRoot "chatgpt-local-agent-mcp-live-monitor.bat")
   [void]$b.AppendLine("Server disconnected: monitor status unavailable.")
   return $b.ToString()
 }
@@ -934,7 +939,7 @@ function Build-AgentBrief {
   $tunnel = Get-TunnelProcess
   $warnings = ConvertTo-NonNullArray (Get-Warnings (Get-JournalEvents 200))
   return @(
-    "Agentic Filesystem MCP fallback diagnostic brief",
+    "chatgpt-local-agent-mcp-fallback-diagnostic-brief",
     "",
     "Repo: $RepoRoot",
     "Local dashboard: $(Get-LocalBaseUrl)/dashboard",
@@ -1107,7 +1112,7 @@ function Build-RefreshSnapshot {
         Write-FallbackLog "Build-AgentBrief failed: $($_.Exception.Message)"
       }
     }
-    $snapshot.formTitle = "Agentic Filesystem MCP Fallback Dashboard - $(if ($script:ConnectedStatus) { 'server connected' } else { 'fallback mode' })"
+    $snapshot.formTitle = "chatgpt-local-agent-mcp-fallback-dashboard - $(if ($script:ConnectedStatus) { 'server connected' } else { 'fallback mode' })"
     $snapshot.lastRefreshText = "Last refresh: $(Get-Date -Format 'HH:mm:ss')"
     return $snapshot
   } catch {
@@ -1190,7 +1195,7 @@ Read-EnvMap | Out-Null
 [System.Windows.Forms.Application]::EnableVisualStyles()
 
 $script:Form = New-Object System.Windows.Forms.Form
-$script:Form.Text = "Agentic Filesystem MCP Fallback Dashboard"
+$script:Form.Text = "chatgpt-local-agent-mcp-fallback-dashboard"
 $script:Form.Size = New-Object System.Drawing.Size(1220, 800)
 $script:Form.MinimumSize = New-Object System.Drawing.Size(1040, 680)
 $script:Form.StartPosition = "CenterScreen"
