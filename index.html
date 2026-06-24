@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>chatgpt-local-agent-mcp — ChatGPT with local hands</title>
+    <meta
+      name="description"
+      content="A local, supervised control layer that lets ChatGPT help operate your Windows PC: files, browser, desktop and terminal, with you still in control."
+    />
+    <meta name="theme-color" content="#05070f" />
+    <meta property="og:title" content="chatgpt-local-agent-mcp" />
+    <meta
+      property="og:description"
+      content="Stop copy-pasting between ChatGPT and your PC. Give ChatGPT a supervised local workbench."
+    />
+    <meta property="og:type" content="website" />
+    <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="page-shell">
+      <div class="orb orb-one" aria-hidden="true"></div>
+      <div class="orb orb-two" aria-hidden="true"></div>
+      <div class="grain" aria-hidden="true"></div>
+
+      <header class="site-header">
+        <a class="brand" href="#top" aria-label="chatgpt-local-agent-mcp home">
+          <span class="brand-mark">⌁</span>
+          <span>chatgpt-local-agent-mcp</span>
+        </a>
+        <nav class="nav-links" aria-label="Primary navigation">
+          <a href="#workbench">Workbench</a>
+          <a href="#control">Control</a>
+          <a href="#quickstart">Quick start</a>
+          <a class="nav-cta" href="https://github.com/XxYouDeaDPunKxX/chatgpt-local-agent-mcp">GitHub</a>
+        </nav>
+      </header>
+
+      <main id="top">
+        <section class="hero section-pad">
+          <div class="hero-copy reveal">
+            <p class="eyebrow">Local-first • supervised • Windows-focused</p>
+            <h1>ChatGPT is no longer trapped in the chat box.</h1>
+            <p class="hero-lede">
+              Give ChatGPT a supervised local workbench: files, folders, browser,
+              desktop and terminal actions on your own machine, with you still in control.
+            </p>
+            <div class="hero-actions">
+              <a class="button button-primary" href="https://github.com/XxYouDeaDPunKxX/chatgpt-local-agent-mcp">
+                Try it locally
+              </a>
+              <a class="button button-ghost" href="#workbench">See what it can do</a>
+            </div>
+            <div class="trust-row" aria-label="Project trust notes">
+              <span>No hosted backend from this project</span>
+              <span>Local control layer</span>
+              <span>Not a sandbox</span>
+            </div>
+          </div>
+
+          <div class="hero-panel reveal" id="demo-panel" aria-label="Animated local workflow preview">
+            <div class="panel-topbar">
+              <span></span><span></span><span></span>
+              <strong>local workbench</strong>
+            </div>
+            <div class="command-card user-card">
+              <span class="label">You</span>
+              <p id="demo-request">Clean this messy project folder without losing anything.</p>
+            </div>
+            <div class="workflow-grid">
+              <div class="node active" data-step="1">
+                <span>01</span>
+                <strong>Inspect</strong>
+                <p>Read the folder and map what is there.</p>
+              </div>
+              <div class="node" data-step="2">
+                <span>02</span>
+                <strong>Protect</strong>
+                <p>Create backups before touching files.</p>
+              </div>
+              <div class="node" data-step="3">
+                <span>03</span>
+                <strong>Act</strong>
+                <p>Rename, organize, open, run, verify.</p>
+              </div>
+            </div>
+            <div class="activity-feed" aria-live="polite">
+              <p><span>✓</span> Workspace boundary checked</p>
+              <p><span>✓</span> Backup plan prepared</p>
+              <p><span>•</span> Waiting for your next approval</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="section-pad split-section reveal" id="workbench">
+          <div>
+            <p class="eyebrow">What changes</p>
+            <h2>From advice to supervised local action.</h2>
+          </div>
+          <div class="comparison">
+            <article>
+              <span>Before</span>
+              <h3>ChatGPT tells you what to do.</h3>
+              <p>You copy commands, paste paths, upload files, explain what is on your screen and stitch the work together by hand.</p>
+            </article>
+            <article class="after-card">
+              <span>After</span>
+              <h3>ChatGPT can help do the work.</h3>
+              <p>It can inspect local files, operate browser/desktop flows, run controlled commands and report what changed.</p>
+            </article>
+          </div>
+        </section>
+
+        <section class="section-pad feature-section">
+          <div class="section-heading reveal">
+            <p class="eyebrow">Real work, not party tricks</p>
+            <h2>Built for people who use ChatGPT as an operating partner.</h2>
+          </div>
+          <div class="feature-grid">
+            <article class="feature-card reveal">
+              <span class="icon">▣</span>
+              <h3>Organize local folders</h3>
+              <p>Turn scattered files into a clean structure, with backups before risky edits.</p>
+            </article>
+            <article class="feature-card reveal">
+              <span class="icon">⌕</span>
+              <h3>Inspect project files</h3>
+              <p>Let ChatGPT read the local context instead of guessing from pasted fragments.</p>
+            </article>
+            <article class="feature-card reveal">
+              <span class="icon">◉</span>
+              <h3>Use the browser</h3>
+              <p>Help with page checks, browser state, screenshots and web workflows on your machine.</p>
+            </article>
+            <article class="feature-card reveal">
+              <span class="icon">⌘</span>
+              <h3>Run local commands</h3>
+              <p>Execute controlled terminal tasks and return the output where the reasoning happens.</p>
+            </article>
+            <article class="feature-card reveal">
+              <span class="icon">▤</span>
+              <h3>Operate desktop flows</h3>
+              <p>Bridge the gap between instructions in chat and the real interfaces on your PC.</p>
+            </article>
+            <article class="feature-card reveal">
+              <span class="icon">↺</span>
+              <h3>Keep a work trail</h3>
+              <p>Prefer visible actions, recoverable changes and a clearer path back when something matters.</p>
+            </article>
+          </div>
+        </section>
+
+        <section class="section-pad control-section reveal" id="control">
+          <div class="control-card">
+            <div>
+              <p class="eyebrow">Reality check</p>
+              <h2>Powerful by design. Supervision required by design.</h2>
+              <p>
+                This project gives ChatGPT a local control surface. That is the point — and the risk.
+                It is not a cloud bot, not a hosted service and not a security sandbox. Give it only
+                the access you are willing to supervise.
+              </p>
+            </div>
+            <div class="control-list">
+              <p><strong>Local-first:</strong> runs against your own machine and setup.</p>
+              <p><strong>Scoped:</strong> use workspace boundaries and permission modes intentionally.</p>
+              <p><strong>Visible:</strong> prefer inspect → backup → act → verify.</p>
+              <p><strong>Honest:</strong> local power needs local responsibility.</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="section-pad how-section reveal">
+          <div class="section-heading">
+            <p class="eyebrow">How it feels</p>
+            <h2>Three moves from chat to local work.</h2>
+          </div>
+          <div class="steps">
+            <article>
+              <span>1</span>
+              <h3>Install locally</h3>
+              <p>Run the control layer on your Windows PC.</p>
+            </article>
+            <article>
+              <span>2</span>
+              <h3>Connect ChatGPT</h3>
+              <p>Expose the local workbench through your chosen connection path.</p>
+            </article>
+            <article>
+              <span>3</span>
+              <h3>Start supervised</h3>
+              <p>Begin with inspection and backups before destructive work.</p>
+            </article>
+          </div>
+        </section>
+
+        <section class="section-pad quickstart-section reveal" id="quickstart">
+          <div class="quickstart-copy">
+            <p class="eyebrow">For builders, operators and power users</p>
+            <h2>Stop moving work manually between ChatGPT and your PC.</h2>
+            <p>
+              If you already ask ChatGPT to plan, debug, organize, inspect and build, this is the missing bridge:
+              a supervised local operator layer for your own Windows machine.
+            </p>
+          </div>
+          <div class="quickstart-box">
+            <p class="box-title">Start with the repo</p>
+            <code>github.com/XxYouDeaDPunKxX/chatgpt-local-agent-mcp</code>
+            <button class="copy-button" type="button" data-copy="https://github.com/XxYouDeaDPunKxX/chatgpt-local-agent-mcp">
+              Copy GitHub link
+            </button>
+          </div>
+        </section>
+      </main>
+
+      <footer class="site-footer">
+        <span>chatgpt-local-agent-mcp</span>
+        <a href="https://github.com/XxYouDeaDPunKxX/chatgpt-local-agent-mcp">View on GitHub</a>
+      </footer>
+    </div>
+    <script src="script.js"></script>
+  </body>
+</html>
