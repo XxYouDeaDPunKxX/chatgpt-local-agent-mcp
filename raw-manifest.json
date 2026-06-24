@@ -42,17 +42,56 @@
     },
     "json_ld_type": "SoftwareSourceCode"
   },
-  "audience": ["power users", "builders", "operators", "AI-assisted workers", "Windows local automation users"],
-  "safety": ["not a sandbox", "not a hosted service", "supervision required", "workspace boundaries recommended", "backup before risky edits"],
+  "audience": [
+    "power users",
+    "builders",
+    "operators",
+    "AI-assisted workers",
+    "Windows local automation users"
+  ],
+  "safety": [
+    "not a sandbox",
+    "not a hosted service",
+    "supervision required",
+    "workspace boundaries recommended",
+    "backup before risky edits"
+  ],
   "site_files": [
-    {"path": "index.html", "role": "human landing page"},
-    {"path": "styles.css", "role": "page styling"},
-    {"path": "script.js", "role": "small UI animation and copy link behavior"},
-    {"path": "favicon.svg", "role": "favicon"},
-    {"path": "social-preview.svg", "role": "Open Graph image"},
-    {"path": "llms.txt", "role": "LLM-readable project index"},
-    {"path": "raw-manifest.json", "role": "machine-readable discovery manifest"},
-    {"path": "sitemap.xml", "role": "canonical HTML URL sitemap"},
-    {"path": "robots.txt", "role": "project-level discovery companion"}
+    {
+      "path": "index.html",
+      "role": "human landing page"
+    },
+    {
+      "path": "styles.css",
+      "role": "page styling"
+    },
+    {
+      "path": "script.js",
+      "role": "small UI animation and copy link behavior"
+    },
+    {
+      "path": "favicon.svg",
+      "role": "favicon"
+    },
+    {
+      "path": "social-preview.svg",
+      "role": "Open Graph image"
+    },
+    {
+      "path": "llms.txt",
+      "role": "LLM-readable project index"
+    },
+    {
+      "path": "raw-manifest.json",
+      "role": "machine-readable discovery manifest"
+    },
+    {
+      "path": "sitemap.xml",
+      "role": "canonical HTML URL sitemap"
+    },
+    {
+      "path": "robots.txt",
+      "role": "project-level discovery companion"
+    }
   ]
 }
