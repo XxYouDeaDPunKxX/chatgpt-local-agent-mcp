@@ -1,0 +1,58 @@
+{
+  "schema_version": "1.0",
+  "generated_for": "GitHub Pages Discovery Set Protocol v1",
+  "generated_at": "2026-06-25",
+  "project": {
+    "name": "chatgpt-local-agent-mcp",
+    "description": "A supervised local operator layer for ChatGPT on your Windows PC: files, browser, desktop and terminal, with you still in control.",
+    "owner": "XxYouDeaDPunKxX",
+    "repository": "chatgpt-local-agent-mcp",
+    "code_repository": "https://github.com/XxYouDeaDPunKxX/chatgpt-local-agent-mcp",
+    "license_url": "https://github.com/XxYouDeaDPunKxX/chatgpt-local-agent-mcp/blob/main/LICENSE",
+    "is_accessible_for_free": true
+  },
+  "github_pages": {
+    "pages_type": "PROJECT_SITE",
+    "source_branch": "gh-pages",
+    "source_path": "/",
+    "custom_domain": null,
+    "domain_root": "https://xxyoudeadpunkxx.github.io/",
+    "site_root": "https://xxyoudeadpunkxx.github.io/chatgpt-local-agent-mcp/",
+    "discovery_root": "https://xxyoudeadpunkxx.github.io/chatgpt-local-agent-mcp/",
+    "current_page_url": "https://xxyoudeadpunkxx.github.io/chatgpt-local-agent-mcp/"
+  },
+  "discovery": {
+    "llms_txt": "https://xxyoudeadpunkxx.github.io/chatgpt-local-agent-mcp/llms.txt",
+    "raw_manifest_json": "https://xxyoudeadpunkxx.github.io/chatgpt-local-agent-mcp/raw-manifest.json",
+    "sitemap_xml": "https://xxyoudeadpunkxx.github.io/chatgpt-local-agent-mcp/sitemap.xml",
+    "robots_txt": "https://xxyoudeadpunkxx.github.io/chatgpt-local-agent-mcp/robots.txt",
+    "robots_txt_authority": "project-level companion, not authoritative domain-root crawler control"
+  },
+  "page": {
+    "type": "PAGE",
+    "canonical_url": "https://xxyoudeadpunkxx.github.io/chatgpt-local-agent-mcp/",
+    "title": "chatgpt-local-agent-mcp — Give ChatGPT hands. Keep the leash.",
+    "description": "A supervised local operator layer for ChatGPT on your Windows PC: files, browser, desktop and terminal, with you still in control.",
+    "open_graph": {
+      "og_title": "chatgpt-local-agent-mcp",
+      "og_description": "Stop copy-pasting. Give ChatGPT hands. Keep the leash.",
+      "og_type": "website",
+      "og_url": "https://xxyoudeadpunkxx.github.io/chatgpt-local-agent-mcp/",
+      "og_image": "https://xxyoudeadpunkxx.github.io/chatgpt-local-agent-mcp/social-preview.svg"
+    },
+    "json_ld_type": "SoftwareSourceCode"
+  },
+  "audience": ["power users", "builders", "operators", "AI-assisted workers", "Windows local automation users"],
+  "safety": ["not a sandbox", "not a hosted service", "supervision required", "workspace boundaries recommended", "backup before risky edits"],
+  "site_files": [
+    {"path": "index.html", "role": "human landing page"},
+    {"path": "styles.css", "role": "page styling"},
+    {"path": "script.js", "role": "small UI animation and copy link behavior"},
+    {"path": "favicon.svg", "role": "favicon"},
+    {"path": "social-preview.svg", "role": "Open Graph image"},
+    {"path": "llms.txt", "role": "LLM-readable project index"},
+    {"path": "raw-manifest.json", "role": "machine-readable discovery manifest"},
+    {"path": "sitemap.xml", "role": "canonical HTML URL sitemap"},
+    {"path": "robots.txt", "role": "project-level discovery companion"}
+  ]
+}

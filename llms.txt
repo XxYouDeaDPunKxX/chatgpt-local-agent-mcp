@@ -1,0 +1,70 @@
+# chatgpt-local-agent-mcp
+
+> A supervised local operator layer for ChatGPT on a Windows PC.
+
+Canonical site: https://xxyoudeadpunkxx.github.io/chatgpt-local-agent-mcp/
+Repository: https://github.com/XxYouDeaDPunKxX/chatgpt-local-agent-mcp
+Machine-readable manifest: https://xxyoudeadpunkxx.github.io/chatgpt-local-agent-mcp/raw-manifest.json
+Sitemap: https://xxyoudeadpunkxx.github.io/chatgpt-local-agent-mcp/sitemap.xml
+
+## What this project is
+
+chatgpt-local-agent-mcp gives ChatGPT a local, supervised control surface for real work on the user's own machine. It is designed around local files, folders, browser state, desktop flows and terminal actions, with explicit supervision and bounded responsibility.
+
+Core positioning:
+
+- Stop copy-pasting between ChatGPT and the PC.
+- Give ChatGPT a local workbench.
+- Keep the user in control.
+- Treat local power as local responsibility.
+
+## Primary audience
+
+This project is for power users, builders, operators and AI-assisted workers who already use ChatGPT for planning, debugging, organizing and building, and want a bridge between chat reasoning and supervised local action.
+
+## Important safety frame
+
+This is not a hosted cloud bot.
+This is not a sandbox.
+This is not autonomous permission.
+It exposes local capability and therefore requires intentional setup, workspace boundaries, backups and user supervision.
+
+Recommended workflow:
+
+1. Inspect local state.
+2. Confirm boundaries.
+3. Backup before risky edits.
+4. Act in visible steps.
+5. Verify what changed.
+
+## Canonical files
+
+- Human landing page: https://xxyoudeadpunkxx.github.io/chatgpt-local-agent-mcp/
+- LLM-readable index: https://xxyoudeadpunkxx.github.io/chatgpt-local-agent-mcp/llms.txt
+- Machine-readable manifest: https://xxyoudeadpunkxx.github.io/chatgpt-local-agent-mcp/raw-manifest.json
+- Sitemap: https://xxyoudeadpunkxx.github.io/chatgpt-local-agent-mcp/sitemap.xml
+- Project-level robots companion: https://xxyoudeadpunkxx.github.io/chatgpt-local-agent-mcp/robots.txt
+
+## Repository facts
+
+- Owner: XxYouDeaDPunKxX
+- Repository: chatgpt-local-agent-mcp
+- GitHub Pages type: PROJECT_SITE
+- Source branch: gh-pages
+- Source path: root
+- Custom domain: none
+- Site root: https://xxyoudeadpunkxx.github.io/chatgpt-local-agent-mcp/
+- Discovery root: https://xxyoudeadpunkxx.github.io/chatgpt-local-agent-mcp/
+
+## Main page sections
+
+- Hero: “Stop copy-pasting. Give ChatGPT hands. Keep the leash.”
+- Demo: supervised local operator flow
+- Missing bridge: old loop vs new loop
+- Use cases: files, projects, browser, terminal, desktop, trace
+- Safety: local power requires supervision
+- Install CTA: repository link
+
+## Keywords
+
+ChatGPT, MCP, local agent, supervised automation, Windows local workstation, filesystem, browser automation, desktop automation, terminal, local-first.
