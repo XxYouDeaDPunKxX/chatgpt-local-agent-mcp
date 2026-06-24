@@ -296,6 +296,16 @@ If the ChatGPT connector is deleted and recreated, ChatGPT may give you a new re
 
 ---
 
+## 🤖 AI-assisted development
+
+This project was developed with AI assistance.
+
+The project, code, documentation, and repository materials were shaped through human-directed work supported by AI tools during drafting, implementation, review, testing, and refinement.
+
+AI assistance does not make the project automatically correct, complete, secure, or suitable for every use case. Read it, test it, and adapt it to your own context before exposing local files, shell access, browser sessions, or desktop automation.
+
+---
+
 <details>
 <summary>Maintainer and technical details 🧑‍🔧</summary>
 
