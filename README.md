@@ -4,28 +4,85 @@ Give ChatGPT controlled hands on your Windows PC.
 
 ChatGPT is good at thinking through work, writing code, explaining fixes, and spotting problems. But sooner or later it hits the same wall: the real project is on your computer.
 
-The files are there.
-The repo is there.
-The logs are there.
-The browser session is there.
+The files are there.  
+The repo is there.  
+The logs are there.  
+The browser session is there.  
 The broken build is there.
 
-**chatgpt-local-agent-mcp** is a local MCP server that lets ChatGPT reach that machine and work on the real workspace, under your control.
-
-You run it on your Windows PC.
-You expose it through your own authenticated HTTPS endpoint.
-ChatGPT connects to it as a remote MCP server.
-
-From there, ChatGPT can inspect folders, read files, apply patches, run commands, check Git status, open browser sessions, look at screenshots, inspect windows, and help operate the desktop when needed.
+**chatgpt-local-agent-mcp** is a local MCP server that lets ChatGPT work against that real local context, under your control.
 
 The simple version:
 
-**ChatGPT stays the brain.
-This gives it hands on your computer.**
+**ChatGPT stays the brain.  
+This gives it supervised hands on your computer.**
 
-For remote use, the intended setup is your own Cloudflare Tunnel and domain. That gives ChatGPT a stable HTTPS path to your local MCP server without relying on random temporary relay URLs.
+It can inspect folders, read files, apply patches, run commands, check Git status, open browser sessions, look at screenshots, inspect windows, and help operate the desktop when needed.
 
-This is powerful, and it should be treated that way. If the server can see a folder, browser profile, terminal, or desktop session, the connected assistant may be able to use it. Start with a dedicated workspace, keep authentication enabled, and expand access only when you understand what you are exposing.
+This is powerful, and it should be treated that way. A full remote setup is intentionally explicit: you are connecting a local Windows environment to a remote ChatGPT connector. Do not expose local capabilities casually.
+
+---
+
+## Start here: two setup paths ⚡
+
+There are two different things people often mix together:
+
+1. proving the local server works;
+2. exposing it to ChatGPT as a remote MCP connector.
+
+Do them in that order.
+
+### Path A — local-only smoke test
+
+Use this first.
+
+This mode is for proving the app starts locally and that the dashboard/health checks work.
+
+It does **not** connect ChatGPT yet.
+
+```text
+Windows PC
+  -> http://127.0.0.1:8789
+  -> local MCP server
+  -> local dashboard / health checks
+```
+
+For this first test:
+
+```text
+No Cloudflare.
+No public URL.
+No GitHub OAuth App.
+No ChatGPT connector OAuth.
+No remote connector yet.
+```
+
+Start with the installer and run the local dashboard first:
+
+```powershell
+.\install-chatgpt-local-agent-mcp.bat
+```
+
+Then follow [INSTALL.md](INSTALL.md), Path A.
+
+### Path B — full remote ChatGPT connector
+
+Use this only after Path A works.
+
+This is the real remote connector setup:
+
+```text
+ChatGPT
+  -> your HTTPS hostname
+  -> Cloudflare Tunnel or another HTTPS tunnel
+  -> http://127.0.0.1:8789
+  -> local MCP server
+  -> your Windows PC
+```
+
+This path needs OAuth, an allowlist, a public HTTPS MCP URL, and deliberate security choices.
+
+That extra friction is intentional. This project can expose local machine capabilities through a remote connector, so the remote path should stay explicit, supervised, and a bit boring on purpose.
 
 ---
 
@@ -33,25 +90,25 @@ This is powerful, and it should be treated that way. If the server can see a fol
 
 Most AI coding workflows still have a gap.
 
-ChatGPT can tell you what command to run.
+ChatGPT can tell you what command to run.  
 This lets ChatGPT help run the command.
 
-ChatGPT can suggest a patch.
+ChatGPT can suggest a patch.  
 This lets ChatGPT apply the patch.
 
-ChatGPT can ask for a log.
+ChatGPT can ask for a log.  
 This lets ChatGPT inspect the log.
 
-ChatGPT can guess from snippets.
+ChatGPT can guess from snippets.  
 This lets ChatGPT read the actual files.
 
 That changes the workflow.
 
-Instead of copying errors, files, diffs, screenshots, and terminal output back and forth, you can let ChatGPT work through the local MCP tools and keep the loop inside the real machine.
+Instead of copying errors, files, diffs, screenshots, and terminal output back and forth, you can let ChatGPT work through local MCP tools and keep the loop close to the real machine.
 
-You still supervise it.
-You still choose the workspace.
-You still control the endpoint.
+You still supervise it.  
+You still choose the workspace.  
+You still control the endpoint.  
 But ChatGPT is no longer blind to the place where the work actually lives.
 
 ---
@@ -85,114 +142,21 @@ The goal is to let ChatGPT work with the same local reality you are working with
 
 ---
 
-## What the setup looks like 🌍
+## Quick install overview 🧭
 
-A normal remote setup looks like this:
-
-```text
-ChatGPT
-  -> your HTTPS hostname
-  -> Cloudflare Tunnel
-  -> http://127.0.0.1:8789
-  -> local MCP server
-  -> your Windows PC
-```
-
-The MCP endpoint is:
-
-```text
-https://your-public-host.example/mcp
-```
-
-The local server listens on:
-
-```text
-http://127.0.0.1:8789
-```
-
-The local dashboard is:
-
-```text
-http://127.0.0.1:8789/dashboard
-```
-
-You can run it locally first, then expose it through a tunnel only when the local health checks are clean.
-
-If `AUTH_REQUIRED=true`, the server still needs the GitHub and ChatGPT OAuth values in `.env`, even for local testing. For localhost-only smoke checks before OAuth is configured, `AUTH_REQUIRED=false` is allowed only while the server is bound to localhost and no public tunnel is enabled.
-
----
-
-## Cloudflare Tunnel basics 🌐
-
-For ChatGPT to connect from outside your PC, the public hostname must reach your local server.
-
-The recommended Cloudflare setup is a Tunnel, not a Worker.
-
-In Cloudflare DNS, create a tunnel-backed record for your MCP hostname:
-
-```text
-mcp.your-domain.example -> Cloudflare Tunnel
-```
-
-In the tunnel routes, publish that hostname to the local server:
-
-```text
-https://mcp.your-domain.example -> http://127.0.0.1:8789
-```
-
-The server `.env` should then use the same public base URL:
-
-```env
-PUBLIC_BASE_URL=https://mcp.your-domain.example
-CLOUDFLARE_TUNNEL_ENABLED=true
-CLOUDFLARED_CONFIG=C:\Users\you\.cloudflared\config.yml
-```
-
-If the tunnel is configured but `cloudflared` is not running, Cloudflare may show the tunnel as down and the public hostname may return an error such as `530`. Start the local server and the tunnel connector before connecting ChatGPT.
-
----
-
-## Start carefully ⚠️
-
-The default workspace profile is full-machine: on Windows, the server creates profiles for the detected drive roots such as `C:\` and `D:\`.
-
-If you want the first run limited to one test folder or repo, set a custom workspace profile before connecting ChatGPT.
-
-Recommended first run:
-
-1. Keep the server bound to `127.0.0.1`.
-2. Keep `AUTH_REQUIRED=true` once OAuth is configured.
-3. Decide whether you want full-drive access or a custom test workspace profile.
-4. Use a dedicated browser profile if possible.
-5. Keep shell and process access guarded until you understand the tool surface.
-6. Run smoke checks.
-7. Watch the local dashboard while testing.
-8. Only then connect ChatGPT through the public MCP URL.
-
-This project is intentionally capable. Treat access like you would treat a human assistant sitting at your keyboard.
-
----
-
-## Known ChatGPT limits 🚧
-
-This server can expose local tools to ChatGPT, but ChatGPT still has its own safety layer between your request and any connected tool.
-
-Some actions may ask for confirmation or be blocked entirely: changing or deleting things, sending or posting content, using logged-in websites, exposing sensitive data, following suspicious page instructions, or anything that looks like policy evasion or unsafe automation.
-
-Those blocks happen on the ChatGPT/OpenAI side. Making the MCP server more powerful does not bypass them.
-
----
-
-## Quick start ⚡
-
-### Requirements
+### Requirements for Path A — local-only smoke test
 
 * Windows
 * Node.js and npm
 * PowerShell or Windows PowerShell
 * Git recommended
-* Cloudflare Tunnel or another HTTPS tunnel if connecting from ChatGPT
-* GitHub OAuth App for the authenticated remote flow
+
+### Additional requirements for Path B — full remote connector
+
+* Cloudflare Tunnel or another HTTPS tunnel
+* GitHub OAuth App
+* ChatGPT connector OAuth values
+* a public HTTPS MCP endpoint
 
 From the extracted source folder, run:
 
@@ -200,29 +164,23 @@ From the extracted source folder, run:
 .\install-chatgpt-local-agent-mcp.bat
 ```
 
-The installer will guide you through the local setup.
+The extracted source folder is only the source package. The installer copies the app into the runtime install folder and builds there.
 
-Recommended flow:
+Default runtime install folder:
 
-1. Choose an install folder.
-2. Install or update app files.
-3. Run preflight.
-4. Save `.env`.
-5. Install dependencies.
-6. Build the project.
-7. Create shortcuts.
-8. Start the server from the control menu or fallback app.
-9. Run smoke checks.
+```text
+%LOCALAPPDATA%\chatgpt-local-agent-mcp
+```
 
-The extracted source folder is not the runtime folder.
+Your private `.env`, logs, data, dependencies, build output, browser artifacts, journals, backups, and screenshots belong in the install folder, not in the extracted source folder.
 
-Your private `.env`, logs, data, dependencies, build output, browser artifacts, journals, backups, and screenshots belong in the install folder.
+For the exact first-run steps, use [INSTALL.md](INSTALL.md).
 
 ---
 
 ## Local control 🕹️
 
-The project includes local control surfaces so you can see what is happening.
+The project includes local control surfaces so you can see what is happening before connecting anything remotely.
 
 Useful local URLs and tools:
 
@@ -239,14 +197,34 @@ Useful local URLs and tools:
   ```
 
 * fallback PowerShell dashboard
-
 * control menu batch file
-
 * live monitor script
 
 Use these before trusting the remote connector.
 
-The dashboard exists for a reason: when an AI has tools on your machine, visibility matters.
+The dashboard exists for a reason: when an AI has tools near your machine, visibility matters.
+
+---
+
+## Start carefully ⚠️
+
+This project is intentionally capable.
+
+The default workspace profile is full-machine: on Windows, the server creates profiles for detected drive roots such as `C:\` and `D:\` when no custom workspace profile is configured.
+
+If you want the first serious test limited to one folder or repo, configure a custom workspace profile before connecting ChatGPT.
+
+Recommended progression:
+
+1. Run Path A locally first.
+2. Keep the server bound to `127.0.0.1` while testing.
+3. Use one test folder or repo before expanding access.
+4. Use a dedicated browser profile if possible.
+5. Keep shell and process access guarded until you understand the tool surface.
+6. Watch the local dashboard while testing.
+7. Only then configure the remote ChatGPT connector.
+
+Treat access like you would treat a human assistant sitting at your keyboard.
 
 ---
 
@@ -293,6 +271,46 @@ OAUTH_REDIRECT_URIS=
 These are not GitHub credentials.
 
 If the ChatGPT connector is deleted and recreated, ChatGPT may give you a new redirect URI. Update `OAUTH_REDIRECT_URIS` if that happens.
+
+---
+
+## Cloudflare Tunnel basics 🌐
+
+For ChatGPT to connect from outside your PC, the public hostname must reach your local server.
+
+The recommended Cloudflare setup is a Tunnel, not a Worker.
+
+In Cloudflare DNS, create a tunnel-backed record for your MCP hostname:
+
+```text
+mcp.your-domain.example -> Cloudflare Tunnel
+```
+
+In the tunnel routes, publish that hostname to the local server:
+
+```text
+https://mcp.your-domain.example -> http://127.0.0.1:8789
+```
+
+The server `.env` should then use the same public base URL:
+
+```env
+PUBLIC_BASE_URL=https://mcp.your-domain.example
+CLOUDFLARE_TUNNEL_ENABLED=true
+CLOUDFLARED_CONFIG=C:\Users\you\.cloudflared\config.yml
+```
+
+If the tunnel is configured but `cloudflared` is not running, Cloudflare may show the tunnel as down and the public hostname may return an error such as `530`. Start the local server and the tunnel connector before connecting ChatGPT.
+
+---
+
+## Known ChatGPT limits 🚧
+
+This server can expose local tools to ChatGPT, but ChatGPT still has its own safety layer between your request and any connected tool.
+
+Some actions may ask for confirmation or be blocked entirely: changing or deleting things, sending or posting content, using logged-in websites, exposing sensitive data, following suspicious page instructions, or anything that looks like policy evasion or unsafe automation.
+
+Those blocks happen on the ChatGPT/OpenAI side. Making the MCP server more powerful does not bypass them.
 
 ---
 
@@ -401,7 +419,19 @@ AUTH_REQUIRED=true
 NODE_ENV=development
 ```
 
-For a safer first workspace, define `GPT_FS_MCP_WORKSPACE_PROFILES_JSON` for one test folder, keep auth enabled, and guard command execution:
+For local-only smoke testing before OAuth is configured, `AUTH_REQUIRED=false` is allowed only while the server is bound to localhost and no tunnel is enabled.
+
+Safe local-only smoke test values:
+
+```env
+PUBLIC_BASE_URL=http://127.0.0.1:8789
+CLOUDFLARE_TUNNEL_ENABLED=false
+AUTH_REQUIRED=false
+```
+
+Never use `AUTH_REQUIRED=false` with a public URL, public hostname, or tunnel. The installer/server guard against unsafe combinations, but configuration still matters.
+
+For a safer first workspace, define `GPT_FS_MCP_WORKSPACE_PROFILES_JSON` for one test folder, keep auth enabled for remote use, and guard command execution:
 
 ```env
 GPT_FS_MCP_SHELL_POLICY=workspace_guarded
@@ -424,13 +454,7 @@ OAUTH_CLIENT_SECRET=
 OAUTH_REDIRECT_URIS=
 ```
 
-Never expose the server with:
-
-```env
-AUTH_REQUIRED=false
-```
-
-The code rejects unsafe combinations such as public HTTPS with `AUTH_REQUIRED=false`, but configuration still matters. Treat `.env` as security-critical.
+Treat `.env` as security-critical.
 
 ---
 
@@ -666,6 +690,22 @@ The included `.gitignore` excludes the main repo-root runtime directories and lo
 ---
 
 ## Troubleshooting 🩺
+
+### Save `.env` asks for OAuth values during first local test
+
+If `AUTH_REQUIRED=true`, OAuth values are required.
+
+For localhost-only smoke checks before OAuth is configured, use:
+
+```env
+PUBLIC_BASE_URL=http://127.0.0.1:8789
+CLOUDFLARE_TUNNEL_ENABLED=false
+AUTH_REQUIRED=false
+```
+
+Do not use this configuration with a public URL or tunnel.
+
+---
 
 ### `/mcp` returns 401
 
