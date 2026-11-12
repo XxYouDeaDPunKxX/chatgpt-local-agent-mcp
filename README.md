@@ -1,6 +1,6 @@
 # chatgpt-local-agent-mcp 🖥️
 
-[![M8ven Verified](https://m8ven.ai/badge/mcp/xxyoudeadpunkxx/chatgpt-local-agent-mcp)](https://m8ven.ai/mcp/xxyoudeadpunkxx/chatgpt-local-agent-mcp?s=readme) [![M8ven Verified](https://m8ven.ai/api/agent-verify/badge?id=2c0d754beb5f420a)](https://m8ven.ai/verified/verify?id=2c0d754beb5f420a)
+[![M8ven Verified](https://m8ven.ai/badge/mcp/xxyoudeadpunkxx/chatgpt-local-agent-mcp)](https://m8ven.ai/mcp/xxyoudeadpunkxx/chatgpt-local-agent-mcp?s=readme) [![M8ven Verified](https://m8ven.ai/api/agent-verify/badge?id=c4116b1d5e158651)](https://m8ven.ai/verified/verify?id=c4116b1d5e158651)
 
 Give ChatGPT controlled hands on your Windows PC.
 
