@@ -1469,9 +1469,9 @@ export function registerBrowserScreenshotTool(server: McpServer, runtime: McpRun
   server.registerTool(
     "browser_screenshot",
     {
-      annotations: { destructiveHint: false, idempotentHint: false, openWorldHint: false, readOnlyHint: true },
+      annotations: { destructiveHint: true, idempotentHint: false, openWorldHint: false, readOnlyHint: false },
       description:
-        "Capture a PNG screenshot of the current browser page. Prefer browser_snapshot for DOM/ARIA understanding; use screenshot when visual layout, pixels, or rendering must be inspected.",
+        "Saves a PNG screenshot of the current browser page in the MCP-managed screenshot folder; may delete older PNG files in that folder or an oversized capture. Prefer browser_snapshot for DOM/ARIA understanding; use screenshot when pixels or layout must be inspected.",
       inputSchema: { fullPage: z.boolean().optional().default(false), includeImageBase64: z.boolean().optional().default(false), sessionId: z.string().uuid() },
       outputSchema: {
         auditQuality: z.enum(["visual"]),
