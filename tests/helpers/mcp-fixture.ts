@@ -20,7 +20,9 @@ export async function createFixture(
   scopes: string[] = [...ALL_SCOPES],
   overrides: Partial<McpRuntime["config"]> = {},
 ): Promise<IsolatedFixture> {
-  const root = await fs.mkdtemp(path.join(os.tmpdir(), "local-agent-tool-test-"));
+  // Windows runners may expose TEMP through a directory alias. Match the
+  // physical path checked by assertPathTargetAllowed for workspace profiles.
+  const root = await fs.realpath(await fs.mkdtemp(path.join(os.tmpdir(), "local-agent-tool-test-")));
   const journalPath = path.join(root, ".runtime", "journal.jsonl");
   const config = {
     authRequired: false,
