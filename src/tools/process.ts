@@ -564,8 +564,8 @@ export function registerTailLogTool(server: McpServer, runtime: McpRuntime): voi
   server.registerTool(
     "tail_log",
     {
-      annotations: { destructiveHint: false, idempotentHint: true, openWorldHint: true, readOnlyHint: true },
-      description: "Preferred tool for reading log tails or stdout/stderr from a managed process. Use this instead of shell Get-Content -Tail, tail, or polling log files when practical.",
+      annotations: { destructiveHint: false, idempotentHint: true, openWorldHint: true, readOnlyHint: false },
+      description: "Reads log tails or stdout/stderr from a managed process. On first access it may refresh persisted status metadata for processes that have exited; calls are recorded in the MCP journal. Use this instead of shell Get-Content -Tail, tail, or polling log files when practical.",
       inputSchema: {
         cwd: z.string().optional().describe("Base directory for relative log path resolution."),
         maxBytes: z.number().int().positive().max(1_000_000).optional().default(100_000),

@@ -267,13 +267,13 @@ export function registerScreenScreenshotTool(server: McpServer, runtime: McpRunt
     "screen_screenshot",
     {
       annotations: {
-        destructiveHint: false,
+        destructiveHint: true,
         idempotentHint: false,
         openWorldHint: false,
-        readOnlyHint: true,
+        readOnlyHint: false,
       },
       description:
-        "Visual fallback for desktop inspection. Capture a PNG screenshot of all screens, the primary screen, or an explicit region; prefer window_list, browser_snapshot, browser_console, or browser_network when structured data is enough.",
+        "Saves a PNG desktop screenshot (all screens, primary screen, or region) in the MCP-managed screenshot folder; may delete older PNG files in that folder or an oversized capture. Prefer window_list, browser_snapshot, browser_console, or browser_network when structured data is enough.",
       inputSchema: {
         allowFullDesktop: z.boolean().optional().default(false),
         confirm: z.boolean().optional().default(false),

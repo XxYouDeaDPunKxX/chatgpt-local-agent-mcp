@@ -46,6 +46,7 @@ type BrowserSession = {
   lastUsedAt: number;
   listenedPages: WeakSet<Page>;
   network: BrowserNetworkEntry[];
+  ownedPages: WeakSet<Page>;
   page: Page;
   source: "isolated" | "cdp";
 };
@@ -445,6 +446,9 @@ async function closeOutOfScopeInactivePages(session: BrowserSession): Promise<Ar
   await Promise.all(
     pages.map(async (page, pageIndex) => {
       if (page === session.page || isBlankBrowserUrl(page.url())) return;
+      // A CDP session may contain tabs that predate the agent connection.
+      // Host scope limits actions, but does not confer ownership of those tabs.
+      if (session.source === "cdp" && !session.ownedPages.has(page)) return;
       const hostname = hostnameFromBrowserUrl(page.url());
       if (hostname && hostnameAllowed(hostname, session.allowedHostnames)) return;
       closed.push({
@@ -465,17 +469,23 @@ async function runScopedBrowserAction<T>(
   options: { watchPopup?: boolean } = {},
 ): Promise<{ closedOutOfScopePages: Array<{ pageIndex: number; title: string; url: string }>; result: T }> {
   await assertActivePageInScope(session, `${label} before action`);
-  const popupPromise = options.watchPopup
-    ? session.page.waitForEvent("popup", { timeout: 1_000 }).catch(() => undefined)
-    : undefined;
-  const result = await action();
-  if (popupPromise) {
-    await popupPromise;
-    await session.page.waitForTimeout(100).catch(() => undefined);
+  const recordPopup = (page: Page) => session.ownedPages.add(page);
+  session.page.on("popup", recordPopup);
+  try {
+    const popupPromise = options.watchPopup
+      ? session.page.waitForEvent("popup", { timeout: 1_000 }).catch(() => undefined)
+      : undefined;
+    const result = await action();
+    if (popupPromise) {
+      await popupPromise;
+      await session.page.waitForTimeout(100).catch(() => undefined);
+    }
+    const closedOutOfScopePages = await closeOutOfScopeInactivePages(session);
+    await assertActivePageInScope(session, `${label} after action`);
+    return { closedOutOfScopePages, result };
+  } finally {
+    session.page.off("popup", recordPopup);
   }
-  const closedOutOfScopePages = await closeOutOfScopeInactivePages(session);
-  await assertActivePageInScope(session, `${label} after action`);
-  return { closedOutOfScopePages, result };
 }
 
 async function locatorFor(page: Page, args: { ariaRef?: string; selector?: string }) {
@@ -710,6 +720,7 @@ export function registerBrowserCdpConnectTool(server: McpServer, runtime: McpRun
                 lastUsedAt: Date.now(),
                 listenedPages: new WeakSet<Page>(),
                 network: [],
+                ownedPages: new WeakSet<Page>(),
                 page,
                 source: "cdp",
               };
@@ -799,6 +810,7 @@ export function registerBrowserSessionCreateTool(server: McpServer, runtime: Mcp
                 lastUsedAt: Date.now(),
                 listenedPages: new WeakSet<Page>(),
                 network: [],
+                ownedPages: new WeakSet<Page>(),
                 page,
                 source: "isolated",
               };
@@ -973,7 +985,7 @@ export function registerBrowserPageSelectTool(server: McpServer, runtime: McpRun
           try {
             assertUrlWithinAllowedHostnames(page.url(), session.allowedHostnames, "Selected browser page");
           } catch (error) {
-            if (page !== session.page) {
+            if (page !== session.page && (session.source !== "cdp" || session.ownedPages.has(page))) {
               await page.close({ runBeforeUnload: false }).catch(() => undefined);
             }
             throw error;
@@ -1469,9 +1481,9 @@ export function registerBrowserScreenshotTool(server: McpServer, runtime: McpRun
   server.registerTool(
     "browser_screenshot",
     {
-      annotations: { destructiveHint: false, idempotentHint: false, openWorldHint: false, readOnlyHint: true },
+      annotations: { destructiveHint: true, idempotentHint: false, openWorldHint: false, readOnlyHint: false },
       description:
-        "Capture a PNG screenshot of the current browser page. Prefer browser_snapshot for DOM/ARIA understanding; use screenshot when visual layout, pixels, or rendering must be inspected.",
+        "Saves a PNG screenshot of the current browser page in the MCP-managed screenshot folder; may delete older PNG files in that folder or an oversized capture. Prefer browser_snapshot for DOM/ARIA understanding; use screenshot when pixels or layout must be inspected.",
       inputSchema: { fullPage: z.boolean().optional().default(false), includeImageBase64: z.boolean().optional().default(false), sessionId: z.string().uuid() },
       outputSchema: {
         auditQuality: z.enum(["visual"]),
