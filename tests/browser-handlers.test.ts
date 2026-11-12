@@ -16,7 +16,8 @@ test("isolated browser handlers interact with a local page and return observable
     }
     response.end(`<!doctype html>
       <title>Local fixture</title>
-      <label for="name">Name</label><input id="name" />
+      <label for="name">Name</label><input id="name" oninput="document.querySelector('#echo').textContent = this.value" />
+      <span id="echo">Empty</span>
       <button id="submit" onclick="document.querySelector('#status').textContent = document.querySelector('#name').value; document.querySelector('#status').dataset.state='done'">Submit</button>
       <p id="status">Waiting</p>
       <script>console.log('fixture-ready')</script>`);
@@ -50,6 +51,8 @@ test("isolated browser handlers interact with a local page and return observable
     const typedInput = { sessionId, selector: "#name", targetDescription: "synthetic name input", purpose: "test local input" };
     const filled = await callOk(f, "browser_fill", { ...typedInput, value: "Ada" });
     assert.equal(filled.filled, true);
+    const filledPage = await callOk(f, "browser_snapshot", { sessionId });
+    assert.match(filledPage.ariaSnapshot, /Ada/, "Observe the form's changed DOM after fill");
     const typed = await callOk(f, "browser_type", { ...typedInput, text: " Lovelace" });
     assert.equal(typed.typed, true);
     const pressed = await callOk(f, "browser_press_key", { sessionId, key: "End", purpose: "test keyboard", targetDescription: "page" });

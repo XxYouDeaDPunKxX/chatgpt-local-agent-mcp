@@ -40,7 +40,7 @@ test("git tools inspect and commit only an isolated temporary repository", { tim
   }
 });
 
-test("process discovery and wait_for_port observe a synthetic loopback listener", { timeout: 20_000 }, async () => {
+test("process discovery and wait_for_port observe a synthetic loopback listener", { timeout: 20_000 }, async (t) => {
   const f = await createFixture();
   const listener = net.createServer();
   try {
@@ -51,11 +51,17 @@ test("process discovery and wait_for_port observe a synthetic loopback listener"
     const port = (listener.address() as AddressInfo).port;
     const waited = await callOk(f, "wait_for_port", { port, timeoutMs: 2_000, intervalMs: 50 });
     assert.equal(waited.reachable, true);
-    const processes = await callOk(f, "process_list", { maxProcesses: 2_000 });
-    assert.ok(Array.isArray(processes.processes));
-    assert.ok(processes.processes.some((item: { pid: number }) => item.pid === process.pid));
     const ports = await callOk(f, "port_list", { protocol: "tcp" });
     assert.ok(ports.ports.some((item: { localPort: number }) => item.localPort === port));
+    const processResult = await f.client.callTool({ name: "process_list", arguments: { maxProcesses: 2_000 } });
+    if (processResult.isError && /accesso negato|access is denied/i.test(JSON.stringify(processResult))) {
+      t.skip("Windows denied Win32_Process enumeration in this sandbox");
+      return;
+    }
+    assert.notEqual(processResult.isError, true, `process_list: ${JSON.stringify(processResult)}`);
+    const processes = processResult.structuredContent as { processes: Array<{ pid: number }> };
+    assert.ok(Array.isArray(processes.processes));
+    assert.ok(processes.processes.some((item) => item.pid === process.pid));
     await callRejected(f, "wait_for_port", { host: "example.com", port: 80, timeoutMs: 1 }, /loopback hosts/);
     await callRejected(f, "process_kill", { pid: process.pid }, /Refusing to kill the MCP server process/);
   } finally {
@@ -125,10 +131,65 @@ test("managed process dry-run does not spawn and a short-lived fixture records i
   }
 });
 
-test("process_kill confirms the exact synthetic child identity before termination", { timeout: 20_000 }, async () => {
+test("stop_process terminates a live managed synthetic process", { timeout: 15_000 }, async (t) => {
+  const f = await createFixture(undefined, { processPolicy: "full" });
+  try {
+    // An automatic exit bounds cleanup even if Windows denies taskkill in this sandbox.
+    const command = 'node -e "console.log(\'fixture-live\'); setTimeout(() => process.exit(0), 4000)"';
+    const started = await callOk(f, "start_process", { cwd: f.root, command, confirm: true, dryRun: false });
+    assert.ok(started.processId);
+    assert.ok(started.pid > 0);
+
+    let ready = false;
+    for (let attempt = 0; attempt < 40; attempt += 1) {
+      const tail = await callOk(f, "tail_log", { processId: started.processId, maxBytes: 4096 });
+      if (tail.content.includes("fixture-live")) {
+        ready = true;
+        break;
+      }
+      await new Promise((resolve) => setTimeout(resolve, 100));
+    }
+    assert.equal(ready, true, "The managed child should reach its ready state");
+
+    const preview = await callOk(f, "stop_process", { processId: started.processId });
+    assert.equal(preview.dryRun, true);
+    assert.equal(preview.stopped, false);
+    assert.equal(preview.exited, false);
+
+    const stopResult = await f.client.callTool({
+      name: "stop_process",
+      arguments: { processId: started.processId, dryRun: false, confirm: true },
+    });
+    const stopped = stopResult.structuredContent as Record<string, unknown>;
+    const deniedBySandbox = stopResult.isError === true && /access is denied|accesso negato/i.test(String(stopped?.stderr));
+    if (!deniedBySandbox) {
+      assert.notEqual(stopResult.isError, true, `stop_process: ${JSON.stringify(stopResult)}`);
+      assert.equal(stopped.dryRun, false);
+      assert.equal(stopped.stopped, true);
+      assert.equal(stopped.code, 0);
+    }
+
+    const metadataPath = path.join(f.root, ".runtime", "processes", started.processId, "metadata.json");
+    let exited = false;
+    for (let attempt = 0; attempt < 40; attempt += 1) {
+      const metadata = JSON.parse(await fs.readFile(metadataPath, "utf8")) as { status: string };
+      if (metadata.status === "exited") {
+        exited = true;
+        break;
+      }
+      await new Promise((resolve) => setTimeout(resolve, 100));
+    }
+    assert.equal(exited, true, "The managed process metadata should record exit");
+    if (deniedBySandbox) t.skip("Windows denied taskkill for the synthetic child; live stop remains unverified here");
+  } finally {
+    await f.close();
+  }
+});
+
+test("process_kill confirms the exact synthetic child identity before termination", { timeout: 20_000 }, async (t) => {
   const f = await createFixture();
   const marker = `local-agent-kill-fixture-${crypto.randomUUID()}`;
-  const child = spawn(process.execPath, ["-e", "setInterval(()=>{},1000)", marker], {
+  const child = spawn(process.execPath, ["-e", "setTimeout(()=>process.exit(0),4000)", marker], {
     cwd: f.root,
     stdio: "ignore",
     windowsHide: true,
@@ -141,7 +202,19 @@ test("process_kill confirms the exact synthetic child identity before terminatio
       expectedCommandSubstring: marker,
       tree: true,
     };
-    const preview = await callOk(f, "process_kill", args);
+    const discovery = await f.client.callTool({ name: "process_list", arguments: { maxProcesses: 2_000 } });
+    if (discovery.isError && /accesso negato|access is denied/i.test(JSON.stringify(discovery))) {
+      t.skip("Windows denied Win32_Process enumeration required by process_kill");
+      return;
+    }
+    assert.notEqual(discovery.isError, true, `process_list: ${JSON.stringify(discovery)}`);
+    const previewResult = await f.client.callTool({ name: "process_kill", arguments: args });
+    if (previewResult.isError && /accesso negato|access is denied/i.test(JSON.stringify(previewResult))) {
+      t.skip("Windows denied Win32_Process enumeration needed to verify the synthetic child identity");
+      return;
+    }
+    assert.notEqual(previewResult.isError, true, `process_kill: ${JSON.stringify(previewResult)}`);
+    const preview = previewResult.structuredContent as Record<string, any>;
     assert.equal(preview.dryRun, true);
     assert.equal(preview.killed, false);
     assert.equal(child.exitCode, null);
@@ -159,7 +232,12 @@ test("process_kill confirms the exact synthetic child identity before terminatio
       });
     }
   } finally {
-    if (child.exitCode === null) child.kill();
+    if (child.exitCode === null && child.signalCode === null) {
+      await new Promise<void>((resolve) => {
+        const timeout = setTimeout(resolve, 6_000);
+        child.once("exit", () => { clearTimeout(timeout); resolve(); });
+      });
+    }
     await f.close();
   }
 });
