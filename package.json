@@ -10,6 +10,7 @@
     "build": "tsc -p tsconfig.json",
     "audit:publish-safe": "node scripts/pack-safe.mjs",
     "test": "tsx --test tests/*.test.ts",
+    "test:desktop": "tsx --test tests/manual/*.test.ts",
     "type-check": "tsc --noEmit -p tsconfig.json"
   },
   "dependencies": {

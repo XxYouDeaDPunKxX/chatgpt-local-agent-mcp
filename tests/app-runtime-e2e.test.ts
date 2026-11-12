@@ -176,7 +176,9 @@ test("real Express server: dev MCP HTTP tools, body guard, browser screenshot an
       }
     });
 
-    await t.test("2x2 desktop region screenshot stays in isolated fixture", async () => {
+    await t.test("2x2 desktop region screenshot stays in isolated fixture", {
+      skip: process.env.CI ? "Interactive Windows desktop capture is validated locally" : false,
+    }, async () => {
       const captured = await client.callTool({ name: "screen_screenshot", arguments: {
         mode: "region", x: 0, y: 0, width: 2, height: 2, includeImageBase64: false,
       }});
